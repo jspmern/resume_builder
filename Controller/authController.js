@@ -1,3 +1,4 @@
+const { accessTokenGenerators, refreshTokenGenerators } = require("../helper/authtoken")
 const registration = require("../models/registrationModel")
 let slugify=require('slugify')
 
@@ -31,7 +32,10 @@ let loginController=async(req,res)=>{
                         let validUser=await availableUser.comparePassword(password,availableUser.password)
                        if(validUser)
                         {
-                           res.status(200).send({ok:true})
+                            let accesstoken= await accessTokenGenerators(availableUser.id)
+                            let refreshtoken= await refreshTokenGenerators(availableUser.id)
+                            console.log(accesstoken,refreshtoken)
+                           res.status(200).send({accessToken:accesstoken,refresToken:refreshtoken})
                            //access token and refreshtoken
                            //here we have to set token
                         }
@@ -44,4 +48,7 @@ let loginController=async(req,res)=>{
                 }
         }
 }
-module.exports={registrationController,loginController}
+let tokenController=async(req,res)=>{
+    res.send(req.payload)
+}
+module.exports={registrationController,loginController,tokenController}
