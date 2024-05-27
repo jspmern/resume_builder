@@ -45,10 +45,10 @@ async function verifyTokenGenerators(req, res, next) {
  } catch (error) {
       if(error.name=="JsonWebTokenError")
         {
-            throw new Error('User is Unauthrized')
+            next( new Error('User is Unauthrized'))
         }  
         else{
-            throw new Error(error.message)
+            next( new Error(error.message))
         }
  }
 }
