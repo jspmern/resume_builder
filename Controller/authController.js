@@ -33,6 +33,7 @@ let loginController=async(req,res)=>{
                         {
                            res.status(200).send({ok:true})
                            //access token and refreshtoken
+                           //here we have to set token
                         }
                         else{
                             res.status(500).send({message:"Either password or email is wrong"})
