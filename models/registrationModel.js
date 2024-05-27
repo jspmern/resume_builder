@@ -1,13 +1,13 @@
 let mongoose = require("mongoose");
-let bcrypt=require('bcrypt')
-let salt=10
-let registrationSchema =new mongoose.Schema(
+let bcrypt = require("bcrypt");
+let salt = 10;
+let registrationSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
       minLength: [2, "length must be greter than 2"],
-      lowercase: true
+      lowercase: true,
     },
     email: {
       type: String,
@@ -54,26 +54,27 @@ let registrationSchema =new mongoose.Schema(
         },
       },
     },
-    slug:{
-     type:String
-    }
+    slug: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
 //using middlware for salting the password
-registrationSchema.pre('save',async function(next){
-    if(this.password)
-        {
-            let  hashPassword = await bcrypt.hash(this.password,salt) 
-            this.password=hashPassword
-            next() 
-        }
-        else
-        {
-             throw new Error("all Field is required *")
-        }
-  
-})
+registrationSchema.pre("save", async function (next) {
+  if (this.password) {
+    let hashPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashPassword;
+    next();
+  } else {
+    throw new Error("all Field is required *");
+  }
+});
+registrationSchema.methods.comparePassword= async function(row,hash)
+{
+  let matchPassword= await bcrypt.compare(row,hash)
+  return matchPassword
+}
 //this is for registaration model
 let registration = mongoose.model("regi", registrationSchema);
 module.exports = registration;

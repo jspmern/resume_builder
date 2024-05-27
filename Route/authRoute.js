@@ -1,5 +1,8 @@
 let express=require('express')
-const { registrationController } = require('../Controller/authController')
+const { registrationController, loginController } = require('../Controller/authController')
 let route=express.Router()
-route.post('/registration',registrationController)
+//registration || POST
+route.post('/signup',registrationController)
+//login  || POST
+route.post('/signin',loginController)
 module.exports={authRoute:route}
