@@ -57,6 +57,10 @@ let registrationSchema = new mongoose.Schema(
     slug: {
       type: String,
     },
+    token:{
+      type:Array,
+      require:true
+    }
   },
   { timestamps: true }
 );
@@ -74,6 +78,10 @@ registrationSchema.methods.comparePassword= async function(row,hash)
 {
   let matchPassword= await bcrypt.compare(row,hash)
   return matchPassword
+}
+registrationSchema.methods.addToken= async function(newToken)
+{
+  await this.updateOne({ $push: { token: newToken } });
 }
 //this is for registaration model
 let registration = mongoose.model("regi", registrationSchema);
