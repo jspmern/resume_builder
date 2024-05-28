@@ -4,7 +4,7 @@ let express=require('express')
 const {authRoute} = require('./Route/authRoute')
 let app=express()
 let PORT=process.env.PORT || 8000
-
+app.use(express.json())
 //middlware configration
 dotenv.config({})
 dbConnection()
@@ -13,7 +13,7 @@ dbConnection()
 //route
 //middlware for error handling
 app.use('/auth/v1',authRoute)
-app.use(express.json())
+
 app.use((err,req,res,next)=>{
     if(err)
         {
@@ -21,6 +21,7 @@ app.use((err,req,res,next)=>{
             res.send({
               status: err.status || 500,
               message: err.message,
+              sucess:false
             });
         }
         else

@@ -57,10 +57,10 @@ let registrationSchema = new mongoose.Schema(
     slug: {
       type: String,
     },
-    token:{
-      type:Array,
-      requrie:true
-    }
+    token: {
+      type: Array,
+      requrie: true,
+    },
   },
   { timestamps: true }
 );
@@ -76,17 +76,26 @@ registrationSchema.pre("save", async function (next) {
 });
 
 //this is for the compare password by bcrypt
-registrationSchema.methods.comparePassword= async function(row,hash)
-{
-  let matchPassword= await bcrypt.compare(row,hash)
-  return matchPassword
-}
+registrationSchema.methods.comparePassword = async function (row, hash) {
+  let matchPassword = await bcrypt.compare(row, hash);
+  return matchPassword;
+};
 //this is for the saving refresh token in db
-registrationSchema.methods.addToken=async function(refToken)
-{
-      await this.updateOne({$push:{token:refToken}})
-}
+registrationSchema.methods.addToken = async function (refToken) {
+  if (this.token.length >= 3) {
+    throw new Error("Max Limit Cross");
+  }
+  await this.updateOne({ $push: { token: refToken } });
+};
+//this is for the deleting refresh token
+registrationSchema.methods.removeToken = async function (tokenToRemove) {
+  return await this.updateOne({ $pull: { token: tokenToRemove } });
+};
 
+//this is for remove all token form device (logout All)
+registrationSchema.methods.removeAllToken = async function () {
+  return await this.updateOne({ $set: { token: [] } });
+};
 
 //this is for registaration model
 let registration = mongoose.model("regi", registrationSchema);
