@@ -48,11 +48,11 @@ function verifyToken(req, res, next) {
  } catch (error) {
        if(error.name=="JsonWebTokenError")
         {
-            throw new Error('User is Unauthourized')
+            next( new Error('User is Unauthourized'))
         } 
         else
         {
-            throw new Error(error.message)
+             next(new Error(error.message)) 
         }
  }
 }
