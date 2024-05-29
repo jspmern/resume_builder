@@ -107,7 +107,27 @@ let logoutFromAllDevice = async (req, res, next) => {
     next(error);
   }
 };
-//this is for forget Password by 
+//this is for forget-passsword
+let forgetPasswordController = async (req, res, next) => {
+  try {
+    let { email ,password } = req.body;
+    if (!email  || !password)
+      {
+        return res.status(400).send({ message: "All field is required *" });
+      }
+      else{
+        let isUserAvailable=await registration.findOne(email)
+        if(!isUserAvailable){ return res.status(400).send({message:"User is not Registred",success:false}) }
+        
+        
+
+      }
+     
+  } catch (error) {
+    next(error.message);
+  }
+};
+//this is for forget Password by
 let verifyController = async (req, res) => {
   res.json({ ok: "done" });
 };
@@ -115,6 +135,7 @@ module.exports = {
   registrationController,
   loginController,
   verifyController,
-  logoutController, 
+  logoutController,
   logoutFromAllDevice,
+  forgetPasswordController,
 };

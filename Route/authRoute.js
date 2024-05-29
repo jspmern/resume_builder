@@ -10,6 +10,8 @@ route.post('/signin',loginController)
 route.get('/logout/:id',logoutController)
 //logoutAll || GET
 route.get('/logoutAll/:id',logoutFromAllDevice)
+//forgetPassword || POST
+route.post('/forget-password',forgetPasswordController)
 //token || get
 route.get('/token',verifyToken,verifyController)
 module.exports={authRoute:route}
