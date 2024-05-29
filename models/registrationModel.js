@@ -59,7 +59,11 @@ let registrationSchema = new mongoose.Schema(
     },
     token:{
       type:Array,
-      requrie:true
+      requrie:true,
+    },
+    secret:{
+      type:String,
+      require:true
     }
   },
   { timestamps: true }
@@ -84,9 +88,27 @@ registrationSchema.methods.comparePassword= async function(row,hash)
 //this is for the saving refresh token in db
 registrationSchema.methods.addToken=async function(refToken)
 {
-      await this.updateOne({$push:{token:refToken}})
+  if (this.token.length > 3) {
+    throw new Error("Max Limit Cross");
+  }
+  else
+  {
+    await this.updateOne({$push:{token:refToken}})
+  }
+      
 }
 
+//this is for removing refresh token in db
+registrationSchema.methods.removeToken=async function(reftoken)
+{
+   await this.updateOne({$pull:{token:reftoken}})
+}
+
+// this is for removing all refresh token in db
+registrationSchema.methods.removeAllToken=async function()
+{
+  await this.updateOne({$set:{token:[]}})
+}
 
 //this is for registaration model
 let registration = mongoose.model("regi", registrationSchema);
