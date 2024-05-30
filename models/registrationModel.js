@@ -88,13 +88,10 @@ registrationSchema.methods.comparePassword= async function(row,hash)
 //this is for the saving refresh token in db
 registrationSchema.methods.addToken=async function(refToken)
 {
-  if (this.token.length > 3) {
-    throw new Error("Max Limit Cross");
-  }
-  else
-  {
+  
+   
     await this.updateOne({$push:{token:refToken}})
-  }
+  
       
 }
 

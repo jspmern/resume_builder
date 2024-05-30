@@ -3,15 +3,17 @@ let dotenv=require('dotenv')
 let express=require('express')
 const {authRoute} = require('./Route/authRoute')
 let app=express()
+let cors=require('cors')
 let PORT=process.env.PORT || 8000
 app.use(express.json())
 //middlware configration
 dotenv.config({})
 dbConnection()
 //for setting form data into req
-//app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({extended:true}))
 //route
 //middlware for error handling
+app.use(cors())
 app.use('/auth/v1',authRoute)
 
 app.use((err,req,res,next)=>{

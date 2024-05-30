@@ -1,6 +1,7 @@
 const {
   accessTokenGenrator,
   refreshTokenGenrator,
+  refreshTokenVerify,
 } = require("../helper/authtoken");
 let bcrypt=require('bcrypt')
 const registration = require("../models/registrationModel");
@@ -45,7 +46,8 @@ let loginController = async (req, res,next) => {
           //acess and refresh
           let accessToken = await accessTokenGenrator(availableUser.id);
           let refreshToken = await refreshTokenGenrator(availableUser.id);
-          availableUser.addToken(accessToken);
+          if(availableUser.token.length>3) return res.status(400).send({message:'Max limit cross',success:false})
+          availableUser.addToken(refreshToken);
           res.status(200).send({ access: accessToken, refresh: refreshToken });
         } else {
           res.status(500).send({ message: "Either password or email is wrong" });
@@ -125,6 +127,30 @@ let forgetPasswordController=async(req,res,next)=>{
       next(err)
     }
 }
+//this is for the refresh token genration
+let refreshTokenController = async (req,res,next)=>{
+    try{
+         let {refreshToken}=req.body;
+         if(!refreshToken) return res.status(400).send({message:"somthing wrong !",success:false})
+         let verifyUser=await registration.findOne({token:{$in:[refreshToken]}})
+         if(!verifyUser) return res.status(400).send({message:"Unauthorized User",success:false})
+        let decode=  await refreshTokenVerify(refreshToken)
+        req.payload=decode.aud
+        let access=await accessTokenGenrator(decode.aud)
+        let refresh=await refreshTokenGenrator(decode.aud)
+       let result= await registration.findOneAndUpdate(
+          { token:{$in:[refreshToken]} },
+          { $set: { "token.$":refresh } }, // Update operation
+          { new: true } // Options: return the updated document
+        );
+        if(!result) res.status(500).send({message:"Somthing wrong !",success:false})
+        res.status(200).send({refresh,access})
+    }
+    catch(err)
+    {
+      next(err)
+    }
+}
 let verifyController = async (req, res) => {
   res.json({ ok: "done" });
 };
@@ -134,5 +160,6 @@ module.exports = {
   verifyController,
   logoutController,
   logoutFromAllDeviceController,
-  forgetPasswordController
+  forgetPasswordController,
+  refreshTokenController
 };
