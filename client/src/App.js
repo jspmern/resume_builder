@@ -1,15 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
 import react, { useEffect }  from 'react'
-import axios from 'axios'
+import instance from './config/axios';
+import Auth from './Auth';
 function App() {
-  axios.defaults.baseURL="http://127.0.0.1:8000"
   async function print()
   {
     try{
-      let result=await axios.post('/auth/v1/signin',{email:"utsav@gmail.com",password:'Mern@12345'})
+      let result=await instance.post('/auth/v1/signin',{email:"utsav@gmail.com",password:'Mern@12345'})
       let data= result.data;
-      console.log('data is',data)
+      localStorage.setItem('access',data.access)
+      localStorage.setItem('refresh',data.refresh)
     }
     catch(err)
     {
@@ -23,6 +24,7 @@ function App() {
     <div className="App">
       <header className="App-header">
          <h1>Website under the maintenece</h1>
+         <Auth/>
       </header>
     </div>
   );

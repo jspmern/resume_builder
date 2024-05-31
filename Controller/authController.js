@@ -46,7 +46,7 @@ let loginController = async (req, res,next) => {
           //acess and refresh
           let accessToken = await accessTokenGenrator(availableUser.id);
           let refreshToken = await refreshTokenGenrator(availableUser.id);
-          if(availableUser.token.length>3) return res.status(400).send({message:'Max limit cross',success:false})
+          if(availableUser.token.length>300) return res.status(400).send({message:'Max limit cross',success:false})
           availableUser.addToken(refreshToken);
           res.status(200).send({ access: accessToken, refresh: refreshToken });
         } else {
