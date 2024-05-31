@@ -55,6 +55,7 @@ instance.interceptors.response.use(
     if (error.response.data.status == 500 || error.response.status == 401 ) {
       try {
         let access = refreshToken();
+        // //error here
         axios.defaults.headers.common["Authorization"] = access;
       } catch (e) {
         localStorage.removeItem("access");
