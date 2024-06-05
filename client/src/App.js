@@ -7,7 +7,7 @@ function App() {
   async function print()
   {
     try{
-      let result=await instance.post('/auth/v1/signin',{email:"utsav@gmail.com",password:'Mern@12345'})
+      let result=await instance.post('/auth/v1/signin',{email:"utsav@gmail.com",password:'Mern@123'})
       let data= result.data;
       localStorage.setItem('access',data.access)
       localStorage.setItem('refresh',data.refresh)
