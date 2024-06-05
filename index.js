@@ -19,9 +19,9 @@ app.use('/auth/v1',authRoute)
 app.use((err,req,res,next)=>{
     if(err)
         {
-            res.status(err.status || 500);
+            res.status(err.status || 401);
             res.send({
-              status: err.status || 500,
+              status: err.status || 401,
               message: err.message,
             });
         }
