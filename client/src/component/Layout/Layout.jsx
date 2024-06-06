@@ -3,6 +3,7 @@ import Header from './Header'
 import Footer from './Footer'
 import { Outlet } from 'react-router-dom'
 import Aside from './Aside'
+import Loader from '../Loader'
 function Layout() {
   return (
       <>
@@ -13,7 +14,9 @@ function Layout() {
           <Aside/>
         </div>
         <div className="col-md-8">
+     
            <Outlet/>
+        
         </div>
       </div>
       </div>
