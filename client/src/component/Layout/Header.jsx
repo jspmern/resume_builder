@@ -1,10 +1,11 @@
-import React  from "react";
-import { NavLink } from "react-router-dom";
+import React from "react";
+import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../hook/authHook";
- 
 
 function Header() {
-    console.log (useAuth())
+  let {
+    data: { name },
+  } = useAuth();
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark ">
       <div className="container-fluid">
@@ -39,11 +40,40 @@ function Header() {
                 contact
               </NavLink>
             </li>
-            <li className="nav-item ms-auto">
-              <NavLink className="nav-link" to="/signin">
-                Login
-              </NavLink>
-            </li>
+            {name && (
+              <div className="dropdown">
+                <NavLink
+                  className="drop dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton1"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  {<p className="text-white">{name}</p>}
+                </NavLink>
+                <ul
+                  className="dropdown-menu"
+                  aria-labelledby="dropdownMenuButton1"
+                >
+                  <li>
+                    <Link>Profile</Link>
+                  </li>
+                  <li>
+                    <Link>ForgetPassword</Link>
+                  </li>
+                  <li>
+                    <Link>Logout</Link>
+                  </li>
+                </ul>
+              </div>
+            )}
+            {!name && (
+              <li className="nav-item ms-auto">
+                <NavLink className="nav-link" to="/signin">
+                  Login
+                </NavLink>
+              </li>
+            )}
           </ul>
         </div>
       </div>

@@ -8,9 +8,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function Login() {
   let [data,setData] =useState({email:"",password:""})
-  let {loginHandler,data:x,loading}  = useAuth()
+  let {loginHandler,data:x,loading,success,access,refresh}  = useAuth()
   let navigate=useNavigate()
   let location=useLocation()
+
   //this is common input field handler
   function inputFieldHandler(e)
   {
@@ -27,15 +28,18 @@ function Login() {
         }
         else{
           loginHandler(data)
-          navigate('/')   
+          //localStorage.setItem('resume',x.data)
+          localStorage.setItem('access',access)
+          localStorage.setItem('refresh',refresh)
+           //navigate('/')   
         }
   }
   return (
     <>
       <Header />
       <main style={{ minHeight: "80vh", width: "100%" }}>
-        {loading && <Loader/>}
-        {!loading &&
+         {console.table(x)}
+        { 
         <div className="container">
         <div
           className="row "

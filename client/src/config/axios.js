@@ -11,7 +11,6 @@ const instance = axios.create({
 //b.i have to set header.authorazation = accesskey
 instance.interceptors.request.use(
   (request) => {
-    console.log("hello i am request", request);
     let access = localStorage.getItem("access")
       ? localStorage.getItem("access")
       : "";
@@ -32,8 +31,12 @@ instance.interceptors.request.use(
 
 // Add a response interceptor
 instance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log('hello i am response',response)
+      return response
+  },
   async (error) => {
+    console.log('hello i am error',error)
     const originalRequest = error.config;
     // If the error status is 401 and there is no originalRequest._retry flag,
     // it means the token has expired and we need to refresh it

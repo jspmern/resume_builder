@@ -42,15 +42,16 @@ let loginController = async (req, res,next) => {
           password,
           availableUser.password
         );
+        console.log('valid user',validUser)
         if (validUser) {
           //acess and refresh
           let accessToken = await accessTokenGenrator(availableUser.id);
           let refreshToken = await refreshTokenGenrator(availableUser.id);
           if(availableUser.token.length>300) return res.status(400).send({message:'Max limit cross',success:false})
           availableUser.addToken(refreshToken);
-          res.status(200).send({ access: accessToken, refresh: refreshToken });
+          res.status(200).send({ access: accessToken, refresh: refreshToken,data:availableUser,success:true });
         } else {
-          res.status(500).send({ message: "Either password or email is wrong" });
+          res.status(200).send({ message: "Either password or email is wrong",success:false });
         }
       } else {
         return res
